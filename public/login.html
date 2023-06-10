@@ -13,6 +13,7 @@
 <body>
 
     <div class="container my-4">
+        <h1>Login</h1>
         <form onsubmit="event.preventDefault(); login()">
             <div id="login-error" class="error" style="display: none;"></div>
             <div id="login-success" class="success" style="display: none;"></div>
@@ -25,6 +26,8 @@
                 <label for="login-password">Password</label>
                 <input type="password" class="form-control" id="login-password" placeholder="Password">
             </div>
+            <a href="/signup">Don't have an account?</a>
+            <br><br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

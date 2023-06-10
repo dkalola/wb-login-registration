@@ -24,41 +24,31 @@ app.use(express.static("public"));
 // Simulated user data (replace with your own database or storage)
 let users = [
   {
-    id: 1,
-    email: "test@gmail.com",
+    email: "u1@gmail.com",
     password: "$2a$10$4u6v95UPrBQYHXCrD9DQre45lEFTX1tXfMm6LTCef7X0YHN7hY54S",
   }, // Hashed version of "password1"
   {
-    id: 2,
-    email: "user2@example.com",
+    email: "u2@gmail.com",
     password: "$2a$10$E.gUoHfFfJNS3N4yAD.nKu/5Vc8k7m87z6pJHJRU8vnab0veDpOai",
   }, // Hashed version of "password2"
 ];
-
-// Generate a unique ID for new users
-let nextUserId = users.length + 1;
 
 // Middleware to check if the user is logged in
 const requireLogin = (req, res, next) => {
   if (req.session.userId) {
     // User is logged in
-    console.log(
-      "Index ----------------------------------------------------------------"
-    );
+
     next();
   } else {
-    console.log(
-      "Login ----------------------------------------------------------------"
-    );
     // User is not logged in
     res.redirect("/login");
   }
 };
 
-app.get("/", (req, res) => {
-  console.log("Welcome");
+app.get("/", requireLogin, (req, res) => {
+  console.log(req.session.userId);
 
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(__dirname + "/public/page.html");
 });
 
 app.get("/login", (req, res) => {
@@ -87,10 +77,10 @@ app.post("/login", (req, res) => {
 
     if (isMatch) {
       // Store the user ID in the session
-      req.session.userId = user.id;
+      req.session.userId = user.email;
 
       // Password matches, login successful
-      res.status(200).send("Login successful");
+      res.redirect("/");
     } else {
       // Invalid password
       res.status(401).send("Invalid email or password");
